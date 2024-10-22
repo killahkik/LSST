@@ -11,7 +11,7 @@ CREATE TABLE user (
   primary key (id)
   );
 
-CREATE TABLE followedPlayers (  
+CREATE TABLE players (  
   id INT,
   playerID INT NOT NULL,
   playerName VARCHAR(65) NOT NULL,
@@ -19,12 +19,12 @@ CREATE TABLE followedPlayers (
   FOREIGN KEY (id) REFERENCES user(id)
 );
 
-CREATE TABLE Players (  
+CREATE TABLE followedPlayers (  
   id INT,
   playerid INT NOT NULL,
   playerName VARCHAR(65) NOT NULL,
   playerTeam VARCHAR(65) NOT NULL,
-  FOREIGN KEY (id) REFERENCES followedPlayers(id)
+  FOREIGN KEY (id) REFERENCES players(id)
 );
 
 CREATE TABLE recordedGames (
