@@ -1,5 +1,5 @@
 <?php
-$servername = "localhost:3306";
+$servername = "localhost";
 $username = "root";
 $password = "";
 $dbname = "userdata";
@@ -11,19 +11,18 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
-
+//if($_SERVER["REQUEST_METHOD"] == "POST") {
 // Get the name from the form
-$name = $_POST['name'];
+    $email = $_POST['email'];
+    $user = $_POST['username'];
+    $pass = $_POST['password'];
 
 // Prepare and bind
-$stmt = $conn->prepare("INSERT INTO users (name) VALUES (?)");
-$stmt->bind_param("s", $name);
+    $stmt = $conn->prepare("INSERT INTO user (email, username, password) VALUES (?, ?, ?)");
+    $stmt->bind_param("sss", $email, $user, $pass);
 
 // Execute the statement
-$stmt->execute();
-
-echo "New record created successfully";
-
 $stmt->close();
+
 $conn->close();
 ?>
