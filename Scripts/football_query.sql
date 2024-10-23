@@ -55,6 +55,11 @@ CREATE TABLE liveGameData (
   playerTeam VARCHAR(65) NOT NULL,
   FOREIGN KEY (gameID) REFERENCES recordedGames(id)
 );
+alter table user
+drop column Fname;
+
+alter table user
+drop column Lname;
 insert into user  (email, username, password)
 values('sample123@gmail.com', 'sampleUser', '123456');
  
