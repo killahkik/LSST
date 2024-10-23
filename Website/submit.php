@@ -1,5 +1,5 @@
 <?php
-$servername = "localhost";
+$servername = "localhost:3306";
 $username = "root";
 $password = "";
 $dbname = "userdata";
@@ -13,16 +13,19 @@ if ($conn->connect_error) {
 }
 //if($_SERVER["REQUEST_METHOD"] == "POST") {
 // Get the name from the form
-    $email = $_POST['email'];
-    $user = $_POST['username'];
-    $pass = $_POST['password'];
+    $user = $_GET['username'];
+    $email = $_GET['email'];
+    $pass = $_GET['password'];
 
-// Prepare and bind
-    $stmt = $conn->prepare("INSERT INTO user (email, username, password) VALUES (?, ?, ?)");
-    $stmt->bind_param("sss", $email, $user, $pass);
+    $sql = "INSERT INTO user (email, username, password) 
+            VALUES ('$email', '$user', '$pass')";
 
-// Execute the statement
-$stmt->close();
+    if($conn-> query($sql)==TRUE){
+        echo"user inputs stored in table";
+    }else{
+        echo "Error adding into table: " . $conn->error;
+    }
 
 $conn->close();
 ?>
+
