@@ -26,11 +26,11 @@ if (isset($_POST['id']) && isset($_POST['playerTeam']) && isset($_POST['playerNa
 
     if ($stmt->execute()) {
         // Record moved successfully - Redirect with success message
-        header("Location: searchPlayers.html?status=success");
+        header("Location: searchPlayers.php?status=success");
         exit;
     } else {
         // Error occurred - Redirect with error message
-        header("Location: index.php?status=error");
+        header("Location: searchPlayers.php?status=error");
         exit;
     }
 
