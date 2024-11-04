@@ -27,5 +27,52 @@ if (isset($_SESSION['username'])) {
         <?php echo $loginmessage; ?>
     </div>
   </div>
+  <h1>Team Search</h1>
+  <script>
+      // Function to submit the form using AJAX
+      function submitForm(event) {
+          event.preventDefault(); // Prevent default form submission
+
+          // Create a new FormData object to hold the form data
+          const formData = new FormData(document.getElementById("inputForm"));
+
+          // Send an AJAX request to process.php
+          fetch("processTeams.php", {
+              method: "POST",
+              body: formData
+          })
+              .then(response => response.text())
+              .then(data => {
+                  // Display the response in the result div
+                  document.getElementById("result").innerHTML = data;
+              })
+              .catch(error => console.error("Error:", error));
+      }
+      function loadPlayers(teamId) {
+          const detailsDiv = document.getElementById(`details-${teamId}`);
+
+          // Check if details are already visible
+          if (detailsDiv.style.display === "none") {
+              // Fetch the details only if they are not loaded yet
+              fetch(`get_details.php?team_id=${teamId}`)
+                  .then(response => response.text())
+                  .then(data => {
+                      detailsDiv.innerHTML = data;
+                      detailsDiv.style.display = "block";
+                  })
+                  .catch(error => console.error("Error fetching details:", error));
+          } else {
+              // Hide the details if they are already visible
+              detailsDiv.style.display = "none";
+          }
+      }
+  </script>
+
+  <form id="inputForm" onsubmit="submitForm(event)">
+      <label for="userInput">Enter something:</label>
+      <input type="text" id="userInput" name="userInput" required>
+      <button type="submit">Submit</button>
+  </form>
+  <div id="result"></div>
 </body>
 </html>

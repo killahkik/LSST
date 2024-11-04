@@ -6,6 +6,7 @@ if (isset($_SESSION['username'])) {
 } else {
     $loginmessage = "You are not logged in.";
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -26,6 +27,51 @@ if (isset($_SESSION['username'])) {
             <div class="loginmessage">
                 <?php echo $loginmessage; ?>
             </div>
+        </div>
+        <div class="followedPlayers">
+            <?php
+            // Database connection details
+            $servername = "localhost";
+            $username = "root";      // Your database username
+            $password = "";          // Your database password
+            $dbname = "userData";  // Your database name
+
+            // Connect to the database
+            $conn = new mysqli($servername, $username, $password, $dbname);
+            $userID= $_SESSION['username'];
+            $sql1 = "SELECT * FROM user WHERE username LIKE ?";
+            $stmt1 = $conn->prepare($sql1);
+            $searchParam1 = "%" . $userID . "%";
+            $stmt1->bind_param("s", $searchParam1);
+            $stmt1->execute();
+            $result = $stmt1->get_result();
+            if ($result->num_rows > 0) {
+                while ($row1 = $result->fetch_assoc()) {
+                    $userID= $row1['id'];
+                }
+            }
+            $stmt1->close();
+            $sql = "SELECT * FROM followedPlayers WHERE id LIKE ?";
+            $stmt = $conn->prepare($sql);
+            $searchParam = "%" . $userID . "%";
+            $stmt->bind_param("s", $searchParam);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            if ($result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                    echo "ID: " . $userID . "<br>";
+                    echo "Team: " . $row['playerTeam'] . "<br>";
+                    echo "Name: " . $row['playerName'] . "<br>";
+                    echo "Number: " . $row['playerNumber'] . "<br>";
+                    echo "Position: " . $row['playerPosition'] . "<br><br>";
+                }
+
+            }else {
+                echo "No results found for '" . htmlspecialchars($userID) . "'";
+            }
+            $stmt-> close();
+            $conn->close();
+            ?>
         </div>
     </body>
     </html>

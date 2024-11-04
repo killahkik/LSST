@@ -60,4 +60,7 @@ CREATE TABLE liveGameData (
 
 insert into user  (email, username, password)
 values('sample123@gmail.com', 'sampleUser', '123456');
+
+insert into user  (email, username, password)
+values('s12345@gmail.com', 'user2Ex', '123456');
  

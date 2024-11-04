@@ -31,6 +31,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($password == $user['password']) {
             $_SESSION['username'] = $user['username'];
             $message = "Login successful.";
+            header("location: Home.php");
         } else {
             $message = "Invalid password or username.";
         }

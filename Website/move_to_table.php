@@ -13,8 +13,8 @@ if ($conn->connect_error) {
 }
 
 // Check if the necessary data is received
-if (isset($_POST['id']) && isset($_POST['playerTeam']) && isset($_POST['playerName']) && isset($_POST['playerNumber']) && isset($_POST['playerPosition'])) {
-    $id = $_POST['id'];
+if (isset($_POST['user_id']) && isset($_POST['playerTeam']) && isset($_POST['playerName']) && isset($_POST['playerNumber']) && isset($_POST['playerPosition'])) {
+    $id = $_POST['user_id'];
     $playerName = $_POST['playerTeam'];
     $playerTeam = $_POST['playerName'];
     $playerNumber = $_POST['playerNumber'];

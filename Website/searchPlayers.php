@@ -3,9 +3,11 @@ session_start();
 $loginmessage = "";
 if (isset($_SESSION['username'])) {
     $loginmessage = "Logged in as: " . $_SESSION['username'] . ". <a href='logout.php'>Logout</a>";
+    $_POST['username'] = $_SESSION['username'];
 } else {
     $loginmessage = "You are not logged in.";
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -20,9 +22,9 @@ if (isset($_SESSION['username'])) {
     <a href="Home.php">Home</a>
     <a href="login.php">Login</a>
     <a href="register.php">Register</a>
-    <a href="searchplayers.php">Players</a>
-    <a href="searchteams.php">Teams</a>
-    <a href="searchgames.php">Games</a>
+    <a href="searchPlayers.php">Players</a>
+    <a href="searchTeams.php">Teams</a>
+    <a href="searchGames.php">Games</a>
     <div class="loginmessage">
         <?php echo $loginmessage; ?>
     </div>
@@ -37,7 +39,7 @@ if (isset($_SESSION['username'])) {
     const formData = new FormData(document.getElementById("inputForm"));
 
     // Send an AJAX request to process.php
-    fetch("process.php", {
+    fetch("processPlayers.php", {
       method: "POST",
       body: formData
     })
