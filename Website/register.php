@@ -1,4 +1,11 @@
 <?php
+session_start();
+$loginmessage = "";
+if (isset($_SESSION['username'])) {
+    $loginmessage = "Logged in as: " . $_SESSION['username'] . ". <a href='logout.php'>Logout</a>";
+} else {
+    $loginmessage = "You are not logged in.";
+}
 $servername = "localhost:3306";
 $username = "root";
 $password = "";
@@ -31,13 +38,21 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
         $message = "Username and password must be less than 20 characters";
         $valid = false;
     }
-    // if username already exists
-    $stmt = $conn->prepare("SELECT * FROM user WHERE username = ?") ;
+    // if username/email already exists
+    $stmt = $conn->prepare("SELECT * FROM user WHERE username = ?");
     $stmt->bind_param("s", $user);
     $stmt->execute();
-    $stmt->get_result();
-    if($stmt->num_rows > 0) {
-        $message = "Username already exists";
+    $result = $stmt->get_result();
+    if ($result->num_rows > 0) {
+        $message = "Username already registered";
+        $valid = false;
+    }
+    $stmt = $conn->prepare("SELECT * FROM user WHERE email = ?");
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    if ($result->num_rows > 0) {
+        $message = "Email already registered";
         $valid = false;
     }
     
@@ -67,12 +82,15 @@ $conn->close();
     </head>
     <body>
         <div class="nav">
-            <a href="Home.html">Home</a>
+            <a href="Home.php">Home</a>
             <a href="login.php">Login</a>
-            <a href="submit.php">Register</a>
-            <a href="searchplayers.html">Players</a>
-            <a href="searchteams.html">Teams</a>
-            <a href="searchgames.html">Games</a>
+            <a href="register.php">Register</a>
+            <a href="searchplayers.php">Players</a>
+            <a href="searchteams.php">Teams</a>
+            <a href="searchgames.php">Games</a>
+            <div class="loginmessage">
+                <?php echo $loginmessage; ?>
+            </div>
         </div>
         <div style="margin: 20px">
             <form action="submit.php" method="post">

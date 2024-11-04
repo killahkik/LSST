@@ -1,6 +1,12 @@
 <?php
-$message = "";
 session_start();
+$loginmessage = "";
+if (isset($_SESSION['username'])) {
+    $loginmessage = "Logged in as: " . $_SESSION['username'] . ". <a href='logout.php'>Logout</a>";
+} else {
+    $loginmessage = "You are not logged in.";
+}
+$message = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $_POST['username'];
@@ -22,15 +28,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $user = $result->fetch_assoc();
 
         // verify password
-        if (password_verify($password, $user['password'])) {
+        if ($password == $user['password']) {
             $_SESSION['username'] = $user['username'];
-            header("Location: dashboard.php");
             $message = "Login successful.";
         } else {
-            $message == "Invalid password or username.";
+            $message = "Invalid password or username.";
         }
     } else {
-        $message == "Invalid password or username.";
+        $message = "Invalid password or username.";
     }
 
     $conn->close();
@@ -46,14 +51,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <title>LSST Registration</title>
     </head>
     <body>
-        <div class="nav">
-            <a href="Home.html">Home</a>
+    <div class="nav">
+            <a href="Home.php">Home</a>
             <a href="login.php">Login</a>
-            <a href="submit.php">Register</a>
-            <a href="searchplayers.html">Players</a>
-            <a href="searchteams.html">Teams</a>
-            <a href="searchgames.html">Games</a>
-        </div>
+            <a href="register.php">Register</a>
+            <a href="searchplayers.php">Players</a>
+            <a href="searchteams.php">Teams</a>
+            <a href="searchgames.php">Games</a>
+            <div class="loginmessage">
+                <?php echo $loginmessage; ?>
+            </div>
+    </div>
         <div style="margin: 20px">
             <form action="login.php" method="post">
                 <label for="name">Username:</label>

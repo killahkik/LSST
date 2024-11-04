@@ -1,3 +1,12 @@
+<?php
+session_start();
+$loginmessage = "";
+if (isset($_SESSION['username'])) {
+    $loginmessage = "Logged in as: " . $_SESSION['username'] . ". <a href='logout.php'>Logout</a>";
+} else {
+    $loginmessage = "You are not logged in.";
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <link rel="stylesheet" href="stylesheet.css">
@@ -7,14 +16,17 @@
   <title>LSST</title>
 </head>
 <body>
-<div class="nav">
-  <a href="Home.html">Home</a>
-  <a href="login.php">Login</a>
-  <a href="submit.php">Register</a>
-  <a href="searchPlayers.html">Players</a>
-  <a href="searchTeams.html">Teams</a>
-  <a href="searchGames.html">Games</a>
-</div>
+  <div class="nav">
+    <a href="Home.php">Home</a>
+    <a href="login.php">Login</a>
+    <a href="register.php">Register</a>
+    <a href="searchplayers.php">Players</a>
+    <a href="searchteams.php">Teams</a>
+    <a href="searchgames.php">Games</a>
+    <div class="loginmessage">
+        <?php echo $loginmessage; ?>
+    </div>
+  </div>
 <h1>Player Search</h1>
 <script>
   // Function to submit the form using AJAX
