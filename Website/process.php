@@ -33,8 +33,19 @@ if (isset($_POST['userInput'])) {
             echo "Name: " . $row['playerName'] . "<br>";
             echo "Number: " . $row['playerNumber'] . "<br>";
             echo "Position: " . $row['playerPosition'] . "<br><br>";
+            // Form to send data to another table
+            echo "<form action='move_to_table.php' method='POST'>";
+            echo "<input type='hidden' name='id' value='" . $row['id'] . "'>";
+            echo "<input type='hidden' name='playerTeam' value='" . $row['playerTeam'] . "'>";
+            echo "<input type='hidden' name='playerName' value='" . $row['playerName'] . "'>";
+            echo "<input type='hidden' name='playerNumber' value='" . $row['playerNumber'] . "'>";
+            echo "<input type='hidden' name='playerPosition' value='" . $row['playerPosition'] . "'>";
+
+            //echo "<input type='hidden' name='user_id' value='" . $loggedInUserId . "'>"; // Include logged-in user's ID
+            echo "<button type='submit'>Move to Other Table</button>";
+            echo "</form><br>";
         }
-        
+
     } else {
         echo "No results found for '" . htmlspecialchars($userInput) . "'";
     }
