@@ -93,7 +93,7 @@ $conn->close();
             </div>
         </div>
         <div style="margin: 20px">
-            <form action="submit.php" method="post">
+            <form action="register.php" method="post">
                 <label for="name">Username:</label>
                 <input type="text" id="username" name="username" required>
                 <br>
