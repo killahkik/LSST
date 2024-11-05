@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Search</title>
+</head>
+<body>
+    <h1>Search Teams</h1>
+    <input type="text" id="userInput" placeholder="Enter team name" required>
+    <button id="searchButton">Search</button>
+
+    <div id="results"></div>
+
+    <script>
+        // Search button handler
+        document.getElementById("searchButton").addEventListener("click", async () => {
+            const userInput = document.getElementById("userInput").value;
+            const resultsDiv = document.getElementById("results");
+            resultsDiv.innerHTML = "";  // Clear previous results
+
+            if (!userInput) {
+                alert("Please provide a search term.");
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/searchTeams', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userInput })
+                });
+
+                const result = await response.json();
+                
+                if (result.status === "success" && result.data.length > 0) {
+                    result.data.forEach(team => {
+                        const teamDiv = document.createElement("div");
+                        teamDiv.innerHTML = `
+                            <p>Team: ${team.teamName}</p>
+                            <p>Wins: ${team.wins}</p>
+                            <p>Loses: ${team.loses}</p>
+                            <button onclick="loadPlayers(${team.teamId})">Show Details</button>
+                            <div id="details-${team.teamId}" style="display: none;"></div>
+                            <hr>
+                        `;
+                        resultsDiv.appendChild(teamDiv);
+                    });
+                } else {
+                    resultsDiv.innerHTML = `<p>No results found for '${userInput}'</p>`;
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                alert("An error occurred while searching for teams.");
+            }
+        });
+
+        // Load player details for a specific team
+        async function loadPlayers(teamId) {
+            const detailsDiv = document.getElementById(`details-${teamId}`);
+
+            // Toggle visibility
+            if (detailsDiv.style.display === "block") {
+                detailsDiv.style.display = "none";
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/loadPlayers?teamId=${teamId}`);
+                const result = await response.json();
+
+                if (result.status === "success" && result.data.length > 0) {
+                    detailsDiv.innerHTML = result.data.map(player => `
+                        <p>Player: ${player.playerName}, Number: ${player.playerNumber}, Position: ${player.playerPosition}</p>
+                    `).join("");
+                    detailsDiv.style.display = "block";
+                } else {
+                    detailsDiv.innerHTML = "<p>No players found for this team.</p>";
+                    detailsDiv.style.display = "block";
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                alert("An error occurred while loading players.");
+            }
+        }
+    </script>
+</body>
+</html>

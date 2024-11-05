@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Follow Player</title>
+</head>
+<body>
+    <h1>Follow a Player</h1>
+    <form id="followPlayerForm">
+        <label for="user_id">User ID:</label>
+        <input type="number" id="user_id" name="user_id" required>
+        <br>
+        <label for="playerTeam">Player Team:</label>
+        <input type="text" id="playerTeam" name="playerTeam" required>
+        <br>
+        <label for="playerName">Player Name:</label>
+        <input type="text" id="playerName" name="playerName" required>
+        <br>
+        <label for="playerNumber">Player Number:</label>
+        <input type="number" id="playerNumber" name="playerNumber" required>
+        <br>
+        <label for="playerPosition">Player Position:</label>
+        <input type="text" id="playerPosition" name="playerPosition" required>
+        <br><br>
+        <button type="submit">Submit</button>
+    </form>
+    <p id="message"></p>
+
+    <script>
+        document.getElementById("followPlayerForm").addEventListener("submit", async function(event) {
+            event.preventDefault();
+
+            const data = {
+                user_id: document.getElementById("user_id").value,
+                playerTeam: document.getElementById("playerTeam").value,
+                playerName: document.getElementById("playerName").value,
+                playerNumber: document.getElementById("playerNumber").value,
+                playerPosition: document.getElementById("playerPosition").value,
+            };
+
+            try {
+                const response = await fetch('/api/followPlayer', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+                const messageElement = document.getElementById("message");
+
+                if (response.ok && result.status === "success") {
+                    messageElement.textContent = "Player followed successfully!";
+                    messageElement.style.color = "green";
+                } else {
+                    messageElement.textContent = "Error following player.";
+                    messageElement.style.color = "red";
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                document.getElementById("message").textContent = "Network error occurred.";
+            }
+        });
+    </script>
+</body>
+</html>

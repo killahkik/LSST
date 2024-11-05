@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Player Search</title>
+</head>
+<body>
+    <h1>Player Search</h1>
+    <div id="loginStatus"></div>
+    <input type="text" id="userInput" placeholder="Enter player name to search" required>
+    <button id="searchButton">Search</button>
+
+    <div id="results"></div>
+
+    <script>
+        // Check if the user is logged in
+        const username = localStorage.getItem("username");
+        const loginStatus = document.getElementById("loginStatus");
+
+        if (username) {
+            loginStatus.innerHTML = `Logged in as: ${username}`;
+        } else {
+            loginStatus.innerHTML = "You are not logged in.";
+        }
+
+        document.getElementById("searchButton").addEventListener("click", async () => {
+            const userInput = document.getElementById("userInput").value;
+
+            if (!userInput) {
+                alert("Please provide a search term.");
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/searchPlayer', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, userInput })
+                });
+
+                const result = await response.json();
+                const resultsDiv = document.getElementById("results");
+                resultsDiv.innerHTML = "";  // Clear previous results
+
+                if (result.status === "success" && result.data.length > 0) {
+                    result.data.forEach(player => {
+                        const playerInfo = document.createElement("div");
+                        playerInfo.innerHTML = `
+                            <p>ID: ${result.userID}</p>
+                            <p>Team: ${player.playerTeam}</p>
+                            <p>Name: ${player.playerName}</p>
+                            <p>Number: ${player.playerNumber}</p>
+                            <p>Position: ${player.playerPosition}</p>
+                            <form class="moveForm">
+                                <input type="hidden" name="user_id" value="${result.userID}">
+                                <input type="hidden" name="playerTeam" value="${player.playerTeam}">
+                                <input type="hidden" name="playerName" value="${player.playerName}">
+                                <input type="hidden" name="playerNumber" value="${player.playerNumber}">
+                                <input type="hidden" name="playerPosition" value="${player.playerPosition}">
+                                <button type="button" onclick="moveToTable(event)">Move to Other Table</button>
+                            </form>
+                            <hr>
+                        `;
+                        resultsDiv.appendChild(playerInfo);
+                    });
+                } else {
+                    resultsDiv.innerHTML = `<p>No results found for '${userInput}'</p>`;
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                alert("An error occurred while searching.");
+            }
+        });
+
+        async function moveToTable(event) {
+            event.preventDefault();
+
+            const formData = new FormData(event.target.closest("form"));
+            const data = Object.fromEntries(formData.entries());
+
+            try {
+                const response = await fetch('/api/movePlayer', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+                if (result.status === "success") {
+                    alert("Player moved successfully!");
+                } else {
+                    alert("Failed to move player.");
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                alert("An error occurred while moving the player.");
+            }
+        }
+    </script>
+</body>
+</html>

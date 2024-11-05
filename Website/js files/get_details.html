@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Details</title>
+    <style>
+        /* Styling for the list */
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Team Details</h1>
+    <div id="teamDetails"></div>
+
+    <script>
+        // Function to fetch and display team details
+        async function fetchTeamDetails(teamId) {
+            try {
+                const response = await fetch(`/api/getPlayerDetails?team_id=${teamId}`);
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                }
+                const data = await response.json();
+
+                const teamDetailsElement = document.getElementById("teamDetails");
+                if (data.length > 0) {
+                    const list = document.createElement("ul");
+                    data.forEach(player => {
+                        const listItem = document.createElement("li");
+                        listItem.textContent = `Player: ${player.playerName}, Number: ${player.playerNumber}, Position: ${player.playerPosition}`;
+                        list.appendChild(listItem);
+                    });
+                    teamDetailsElement.appendChild(list);
+                } else {
+                    teamDetailsElement.textContent = "No additional details found.";
+                }
+            } catch (error) {
+                console.error("Error fetching team details:", error);
+                document.getElementById("teamDetails").textContent = "Failed to load team details.";
+            }
+        }
+
+        // Fetch details for a specific team ID (replace with actual ID as needed)
+        const teamId = 1; // Example team ID
+        fetchTeamDetails(teamId);
+    </script>
+</body>
+</html>

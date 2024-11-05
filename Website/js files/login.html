@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LSST Registration</title>
+    <link rel="stylesheet" href="stylesheet.css">
+    <style>
+        /* Add inline styling as needed */
+        .nav a {
+            margin-right: 10px;
+        }
+        .loginmessage {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="nav">
+        <a href="home.html">Home</a>
+        <a href="login.html">Login</a>
+        <a href="register.html">Register</a>
+        <a href="searchplayers.html">Players</a>
+        <a href="searchteams.html">Teams</a>
+        <a href="searchgames.html">Games</a>
+        <div class="loginmessage" id="loginMessage"></div>
+    </div>
+    
+    <div style="margin: 20px">
+        <form id="loginForm">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+            <br>
+            <label for="password">Password:</label>
+            <input style="margin-top: 20px; margin-left: 4px" type="password" id="password" name="password" required>
+            <br>
+            <input style="margin-top: 20px; margin-left: 85px" type="submit" value="Submit">
+        </form>
+        <p id="message"></p>
+    </div>
+
+    <script>
+        // Check login status and update message
+        function checkLoginStatus() {
+            const loginMessageElement = document.getElementById("loginMessage");
+            const username = localStorage.getItem("username");
+
+            if (username) {
+                loginMessageElement.innerHTML = `Logged in as: ${username}. <a href="#" onclick="logout()">Logout</a>`;
+            } else {
+                loginMessageElement.innerText = "You are not logged in.";
+            }
+        }
+
+        // Function to log out
+        function logout() {
+            localStorage.removeItem("username");
+            checkLoginStatus();
+            alert("You have been logged out.");
+        }
+
+        // Simulate a login check (this would normally involve server-side verification)
+        function login(username, password) {
+            // Simulated user data for demonstration purposes
+            const mockUser = {
+                username: "user1",
+                password: "password123"
+            };
+
+            if (username === mockUser.username && password === mockUser.password) {
+                localStorage.setItem("username", username);
+                document.getElementById("message").innerText = "Login successful.";
+                checkLoginStatus();
+            } else {
+                document.getElementById("message").innerText = "Invalid password or username.";
+            }
+        }
+
+        // Form submission handler
+        document.getElementById("loginForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+            login(username, password);
+        });
+
+        // Check login status on page load
+        document.addEventListener("DOMContentLoaded", checkLoginStatus);
+    </script>
+</body>
+</html>

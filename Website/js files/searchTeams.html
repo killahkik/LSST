@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LSST</title>
+    <link rel="stylesheet" href="stylesheet.css">
+</head>
+<body>
+    <div class="nav">
+        <a href="Home.html">Home</a>
+        <a href="login.html">Login</a>
+        <a href="register.html">Register</a>
+        <a href="searchPlayers.html">Players</a>
+        <a href="searchTeams.html">Teams</a>
+        <a href="searchGames.html">Games</a>
+        <div class="loginmessage" id="loginMessage">Checking login status...</div>
+    </div>
+
+    <h1>Team Search</h1>
+
+    <form id="inputForm">
+        <label for="userInput">Enter something:</label>
+        <input type="text" id="userInput" name="userInput" required>
+        <button type="submit">Submit</button>
+    </form>
+    <div id="result"></div>
+
+    <script>
+        // Fetch login status from the backend
+        async function checkLoginStatus() {
+            try {
+                const response = await fetch('http://localhost:3000/login-status', {
+                    credentials: 'include'
+                });
+                const result = await response.json();
+                document.getElementById('loginMessage').innerHTML = result.message;
+            } catch (error) {
+                console.error('Error fetching login status:', error);
+            }
+        }
+
+        // Check login status on page load
+        checkLoginStatus();
+
+        // Handle form submission with AJAX
+        document.getElementById('inputForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const userInput = document.getElementById('userInput').value;
+            const formData = new URLSearchParams();
+            formData.append('userInput', userInput);
+
+            try {
+                const response = await fetch('http://localhost:3000/process-teams', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    }
+                });
+                const data = await response.text();
+                document.getElementById('result').innerHTML = data;
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        });
+
+        // Load team details via AJAX
+        function loadPlayers(teamId) {
+            const detailsDiv = document.getElementById(`details-${teamId}`);
+
+            if (detailsDiv.style.display === "none") {
+                fetch(`http://localhost:3000/get-team-details?team_id=${teamId}`)
+                    .then(response => response.text())
+                    .then(data => {
+                        detailsDiv.innerHTML = data;
+                        detailsDiv.style.display = "block";
+                    })
+                    .catch(error => console.error("Error fetching team details:", error));
+            } else {
+                detailsDiv.style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>

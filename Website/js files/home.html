@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LSST</title>
+    <link rel="stylesheet" href="stylesheet.css">
+    <style>
+        /* Add any necessary inline styles here */
+        .nav a {
+            margin-right: 10px;
+        }
+        .loginmessage {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="nav">
+        <a href="home.html">Home</a>
+        <a href="login.html">Login</a>
+        <a href="register.html">Register</a>
+        <a href="searchplayers.html">Players</a>
+        <a href="searchteams.html">Teams</a>
+        <a href="searchgames.html">Games</a>
+        <div class="loginmessage" id="loginMessage"></div>
+    </div>
+    <div class="followedPlayers">
+        <!-- Content for followed players can be added here if needed -->
+    </div>
+
+    <script>
+        // Function to check if a user is logged in based on local storage
+        function checkLoginStatus() {
+            const loginMessageElement = document.getElementById("loginMessage");
+            const username = localStorage.getItem("username");
+
+            if (username) {
+                loginMessageElement.innerHTML = `Logged in as: ${username}. <a href="#" onclick="logout()">Logout</a>`;
+            } else {
+                loginMessageElement.innerText = "You are not logged in.";
+            }
+        }
+
+        // Function to log out
+        function logout() {
+            localStorage.removeItem("username");
+            checkLoginStatus(); // Refresh the login message
+            alert("You have been logged out.");
+        }
+
+        // Call the checkLoginStatus function on page load
+        document.addEventListener("DOMContentLoaded", checkLoginStatus);
+    </script>
+</body>
+</html>
