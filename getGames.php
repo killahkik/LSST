@@ -21,19 +21,18 @@ function getNFLGamesForWeek($week, $seasonType, $season) {
             "x-rapidapi-key: ec84d842dcmshe4d04e0ec4d508ep19ffa1jsn71581cd24e76"
         ],
     ]);
-
     // Execute cURL request and fetch response
     $response = curl_exec($curl);
-    $err = curl_error($curl);
 
-    // Close the cURL session
     curl_close($curl);
 
-    // Check for errors and return the result
-    if ($err) {
-        return "cURL Error #:" . $err;
+    $data = json_decode($response, true);
+    echo $data['body'][0]['gameID'] . '<br>';
+    if (isset($data['body'][0]['gameID'])) {
+        $teamAbv = $data['body'][0]['gameID'];
+        echo "Team Abbreviation: " . $teamAbv;
     } else {
-        return $response;
+        echo "teamAbv key not found in response.";
     }
 }
 

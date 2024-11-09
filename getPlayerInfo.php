@@ -24,19 +24,21 @@ function getPlayerInfo($name) {
 
     // Execute cURL request and fetch response
     $response = curl_exec($curl);
-    $err = curl_error($curl);
+
 
     // Close the cURL session
     curl_close($curl);
-
+    $data = json_decode($response, true);
+    echo $data['body'][0]['espnName'] . '<br>';
     // Check for errors and return the result
-    if ($err) {
-        echo "cURL Error #:" . $err;
+    if (isset($data['body'][0]['espnName'])) {
+        $teamAbv = $data['body'][0]['espnName'];
+        echo "Team Abbreviation: " . $teamAbv;
     } else {
-        echo $response;
+        echo "teamAbv key not found in response.";
     }
 }
 
 // Example usage:
-getPlayerInfo("Drake London");
+echo getPlayerInfo("Drake London");
 ?>

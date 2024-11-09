@@ -29,6 +29,7 @@ if (isset($_SESSION['username'])) {
         <?php echo $loginmessage; ?>
     </div>
   </div>
+
 <h1>Player Search</h1>
 <script>
   // Function to submit the form using AJAX
