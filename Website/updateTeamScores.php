@@ -98,6 +98,20 @@ function updateTeamsForLogo(){
     if ($stmt->num_rows > 0) {
         //debugging line to check if column exists or not for visuals
         //echo "Column already exists";
+        $sql = "UPDATE teams SET logo = ? WHERE teamName = ?";
+        $stmt = $conn->prepare($sql);
+        for($i=0; $i <32; $i++) {
+            $teamNameSql = $data['body'][$i]['teamCity'] . " " . $data['body'][$i]['teamName'];
+            $logoTeam = $data['body'][$i]['espnLogo1'];
+            $stmt->bind_param("ss", $logoTeam, $teamNameSql);
+            $stmt->execute();
+            if ($stmt->execute()) {
+                // debug to check if logo team works by display logo in this php section of commented out you wont have any issues
+                //echo "<img src='" . $logoTeam . "' alt='Team logo' style='width: 200px; height: 200px;'>";
+            } else {
+                echo "Error updating record: " . $stmt->error;
+            }
+        }
     } else {
 
         $addColumnSql = "ALTER TABLE teams ADD COLUMN logo VARCHAR(200)";
@@ -111,7 +125,7 @@ function updateTeamsForLogo(){
                 $stmt->bind_param("ss", $logoTeam, $teamNameSql);
                 $stmt->execute();
                 if ($stmt->execute()) {
-                    // debug to check if logoteam works by display logo in this php section of commented out you wont have any issues
+                    // debug to check if logo team works by display logo in this php section of commented out you wont have any issues
                     //echo "<img src='" . $logoTeam . "' alt='Team logo' style='width: 200px; height: 200px;'>";
                 } else {
                     echo "Error updating record: " . $stmt->error;
@@ -129,7 +143,7 @@ function updateTeamsForLogo(){
     $conn->close();
 
 }
-echo updateTeamsForLogo();
+// echo updateTeamsForLogo();
 // Example usage^^
 
 ?>
