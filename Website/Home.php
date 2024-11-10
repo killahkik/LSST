@@ -5,6 +5,7 @@ if (isset($_SESSION['username'])) {
     $loginmessage = "Logged in as: " . $_SESSION['username'] . ". <a href='logout.php'>Logout</a>";
 } else {
     $loginmessage = "You are not logged in.";
+    $_SESSION['username'] = null;
 }
 
 ?>

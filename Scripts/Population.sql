@@ -34,7 +34,7 @@ values ('Arizona Cardinals', 3,4),
 	('Tennessee Titans',1,5),
 	('Washington Commanders',5,2);
 
-insert into players (playerNumber, playerName, playerPosition, playerTeam, id)
+insert into players (jerseyNum, espnName, pos, team, teamID)
 values (74, 'Isaiah Adams', 'OT', 'Arizona Cardinals', 1),
 (3, 'Budda Baker', 'DB', 'Arizona Cardinals', 1),
 (51, 'Krys Barnes', 'LB', 'Arizona Cardinals', 1),

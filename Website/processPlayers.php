@@ -41,7 +41,7 @@ if (isset($_POST['userInput'])) {
     // Retrieve and sanitize the user input
     $userInput = $_POST['userInput'];
     // Prepare and execute a query to search for the string in the 'name' column
-    $sql = "SELECT * FROM players WHERE playerName LIKE ?";
+    $sql = "SELECT * FROM players WHERE espnName LIKE ?";
     $stmt = $conn->prepare($sql);
     $searchParam = "%" . $userInput . "%";
     $stmt->bind_param("s", $searchParam);
@@ -50,18 +50,19 @@ if (isset($_POST['userInput'])) {
     $result = $stmt->get_result();
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
-            echo "ID: " . $userID . "<br>";
-            echo "Team: " . $row['playerTeam'] . "<br>";
-            echo "Name: " . $row['playerName'] . "<br>";
-            echo "Number: " . $row['playerNumber'] . "<br>";
-            echo "Position: " . $row['playerPosition'] . "<br><br>";
+            $playerID = $row["playerID"];
+            echo "Name: <a href=\"playerView.php?playerID=$playerID\"> " . $row['espnName'] . "</a> <br>";
+            echo "ID: " . $playerID . "<br>";
+            echo "Team: " . $row['team'] . "<br>";
+            echo "Number: " . $row['jerseyNum'] . "<br>";
+            echo "Position: " . $row['pos'] . "<br><br>";
             // Form to send data to another table
+            echo "<input type='hidden' name='espnName' value='" . $row['espnName'] . "'>";
             echo "<form action='move_to_table.php' method='POST'>";
-            echo "<input type='hidden' name='user_id' value='" . $userID . "'>"; // Include logged-in user's ID
-            echo "<input type='hidden' name='playerTeam' value='" . $row['playerTeam'] . "'>";
-            echo "<input type='hidden' name='playerName' value='" . $row['playerName'] . "'>";
-            echo "<input type='hidden' name='playerNumber' value='" . $row['playerNumber'] . "'>";
-            echo "<input type='hidden' name='playerPosition' value='" . $row['playerPosition'] . "'>";
+            echo "<input type='hidden' name='playerID' value='" . $playerID . "'>";
+            echo "<input type='hidden' name='team' value='" . $row['team'] . "'>";
+            echo "<input type='hidden' name='jerseyNum' value='" . $row['jerseyNum'] . "'>";
+            echo "<input type='hidden' name='pos' value='" . $row['pos'] . "'>";
 
             echo "<button type='submit'>Move to Other Table</button>";
             echo "</form><br>";

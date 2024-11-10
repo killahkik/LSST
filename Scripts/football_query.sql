@@ -7,15 +7,21 @@ CREATE TABLE user (
   username VARCHAR(65) NOT NULL,
   password VARCHAR(65) NOT NULL,
   primary key (id)
-  );
+);
 
 CREATE TABLE players (  
-  id INT,
-  playerTeam VARCHAR(65) NOT NULL,
-  playerName VARCHAR(65) NOT NULL,
-  playerNumber INT not null,
-  playerPosition Varchar(4) not Null,
-  FOREIGN KEY (id) REFERENCES teams(teamId)
+  playerID INT not null,
+  espnName VARCHAR(65),
+  weight INT,
+  height VARCHAR(65),
+  age INT,
+  jerseyNum INT,
+  team VARCHAR(65),
+  teamID INT,
+  lastGamePlayed VARCHAR(65),
+  pos VARCHAR(4),
+  espnHeadshot VARCHAR(255),
+  PRIMARY KEY (playerID)
 );
 
 CREATE TABLE teams (  
@@ -35,18 +41,20 @@ CREATE TABLE followedPlayers (
   FOREIGN KEY (id) REFERENCES user(id)
 );
 
-CREATE TABLE recordedGames (
-  id INT NOT NULL AUTO_INCREMENT,
-  season INT NOT NULL,
-  teamA VARCHAR(65) NOT NULL,
-  teamB VARCHAR(65) NOT NULL,
-  teamAScore INT,
-  teamBScore INT,
-  primary key(id)
+CREATE TABLE games (
+  gameID VARCHAR(255) PRIMARY KEY,
+  gameDate DATETIME,
+  espnID VARCHAR(255),
+  teamIDHome VARCHAR(255),
+  gameStatus VARCHAR(50),
+  gameWeek VARCHAR(255),
+  teamIDAway VARCHAR(255),
+  gameTime TIME,
+  season VARCHAR(50)
 );
 
 CREATE TABLE liveGameData (  
-  gameID INT NOT NULL AUTO_INCREMENT,
+  gameID INT NOT NULL,
   season INT NOT NULL,
   team1 VARCHAR(65) NOT NULL,
   team2 VARCHAR(65) NOT NULL,
@@ -54,8 +62,7 @@ CREATE TABLE liveGameData (
   actions VARCHAR(65) NOT NULL,
   time VARCHAR(65) NOT NULL,
   points INT NOT NULL,
-  playerTeam VARCHAR(65) NOT NULL,
-  FOREIGN KEY (gameID) REFERENCES recordedGames(id)
+  playerTeam VARCHAR(65) NOT NULL
 );
 
 insert into user  (email, username, password)
