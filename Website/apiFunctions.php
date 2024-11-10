@@ -1,5 +1,5 @@
 <?php
-// include_once 'apiFunctions.php';
+// include_once("apiFunctions.php");
 
 
 // update/insert games for a given week and season into database
@@ -102,7 +102,7 @@ function getGames($week, $season){
 
     /* SQL to create the 'games' table in the 'userdata' database:
     CREATE TABLE games (
-        gameID INT PRIMARY KEY,
+        gameID VARCHAR(255) PRIMARY KEY,
         gameDate DATETIME,
         espnID VARCHAR(255),
         teamIDHome VARCHAR(255),
