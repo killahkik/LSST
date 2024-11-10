@@ -24,7 +24,7 @@ function updateNFLTeams() {
     $data = json_decode($response, true);
     // Close the cURL session
     curl_close($curl);
-    $conn = new mysqli("localhost", "root", "", "userData");
+    $conn = new mysqli("localhost", "root", "", "userdata");
 
     $sql = "UPDATE teams SET wins = ?, loses = ? WHERE teamName = ?";
     $stmt = $conn->prepare($sql);
@@ -83,10 +83,10 @@ function updateTeamsForLogo(){
     //$err = curl_error($curl);
     $data = json_decode($response, true);
     curl_close($curl);
-    $conn = new mysqli("localhost", "root", "", "userData");
+    $conn = new mysqli("localhost", "root", "", "userdata");
     $table= 'teams';
     $column = 'logo';
-    $dbname = "userData";
+    $dbname = "userdata";
     $sql = "SELECT COLUMN_NAME 
         FROM INFORMATION_SCHEMA.COLUMNS 
         WHERE TABLE_SCHEMA = ? 
