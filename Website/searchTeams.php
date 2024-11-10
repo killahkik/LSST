@@ -6,6 +6,8 @@ if (isset($_SESSION['username'])) {
 } else {
     $loginmessage = "You are not logged in.";
 }
+include('updateTeamScores.php');
+$loadPhpTeamFunction = updateNFLTeams();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -29,6 +31,10 @@ if (isset($_SESSION['username'])) {
   </div>
   <h1>Team Search</h1>
   <script>
+      window.onload = myOnloadFunction;
+      function myOnloadFunction(){
+          <?php $loadPhpTeamFunction; ?>
+      }
       // Function to submit the form using AJAX
       function submitForm(event) {
           event.preventDefault(); // Prevent default form submission
