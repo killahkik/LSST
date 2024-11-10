@@ -29,6 +29,7 @@ CREATE TABLE teams (
   teamName VARCHAR(65) NOT NULL,
   wins INT NOT NULL,
   loses INT not null,
+  logo VARCHAR(200),
   primary key (teamID)
 );
 

@@ -7,6 +7,7 @@ if (isset($_SESSION['username'])) {
     $loginmessage = "You are not logged in.";
 }
 include('updateTeamScores.php');
+$loadPhpTeamFunction = updateTeamsForLogo();
 $loadPhpTeamFunction = updateNFLTeams();
 ?>
 <!DOCTYPE html>
@@ -75,9 +76,11 @@ $loadPhpTeamFunction = updateNFLTeams();
   </script>
 
   <form id="inputForm" onsubmit="submitForm(event)">
-      <label for="userInput">Enter something:</label>
+      <h3><label for="userInput">Enter Team name:</label></h3>
+
       <input type="text" id="userInput" name="userInput" required>
       <button type="submit">Submit</button>
+      <p type="small-description">can use city or the team itself or togeather ex: arizona</p>
   </form>
   <div id="result"></div>
 </body>

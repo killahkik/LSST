@@ -14,16 +14,18 @@ if (isset($_GET['team_id'])) {
     $teamId = $_GET['team_id'];
 
     // Fetch related data from another table (e.g., `user_details`)
-    $sql = "SELECT * FROM players WHERE id = ?";
+    $sql = "SELECT * FROM players WHERE teamID = ?";
     $stmt = $conn->prepare($sql);
+    //this grabs from the _get of url into teamId and not confused for sql teamID
     $stmt->bind_param("i", $teamId);
     $stmt->execute();
     $result = $stmt->get_result();
-
+    //checks if there are any number of rows in the teamid for sql then you can grab and access the data inside
     if ($result->num_rows > 0) {
         echo "<ul>";
+        //loops to grab every player, number, and position they are in and puts it in a list
         while ($row = $result->fetch_assoc()) {
-            echo "<li> Player: " . $row['playerName'] .", Number: " . $row['playerNumber'] .", Position: ". $row['playerPosition'] . "</li>";
+            echo "<li> Player: " . $row['espnName'] .", Number: " . $row['jerseyNum'] .", Position: ". $row['pos'] . "</li>";
         }
         echo "</ul>";
     } else {
