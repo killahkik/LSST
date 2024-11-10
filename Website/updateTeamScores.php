@@ -34,9 +34,7 @@ function updateNFLTeams() {
         $teamWins = $data['body'][$i]['wins'];
         $stmt->bind_param("iis",$teamWins,$teamLosses,$teamNameSql);
         $stmt->execute();
-        echo $teamNameSql . " " . $teamLosses . " " . $teamWins . "<br>";
         if ($stmt->execute()) {
-            echo "Record updated successfully.";
         } else {
             echo "Error updating record: " . $stmt->error;
         }
