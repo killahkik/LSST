@@ -66,6 +66,9 @@ CREATE TABLE liveGameData (
   playerTeam VARCHAR(65) NOT NULL
 );
 
+ALTER TABLE teams 
+DROP COLUMN logo;
+
 insert into user  (email, username, password)
 values('sample123@gmail.com', 'sampleUser', '123456');
 
