@@ -34,5 +34,5 @@ function getNFLTeams() {
 }
 
 // Example usage:
-echo getNFLTeams();
+echo getNFLTeams("all","all");
 ?>

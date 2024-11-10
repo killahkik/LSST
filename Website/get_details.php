@@ -37,3 +37,4 @@ if (isset($_GET['team_id'])) {
 
 $conn->close();
 ?>
+
