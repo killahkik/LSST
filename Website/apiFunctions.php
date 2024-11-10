@@ -3,7 +3,7 @@
 
 
 // update/insert games for a given week and season into database
-function getGames($week, $season){}
+function getGames($week, $season){
     $curl = curl_init();
     $seasonType = "reg";
 
@@ -77,7 +77,7 @@ function getGames($week, $season){}
 
             // Bind parameters and execute
             $stmt->bind_param(
-                "issssisss", 
+                "sssssisss", 
                 $gameID, 
                 $gameDate, 
                 $espnID, 
@@ -113,3 +113,24 @@ function getGames($week, $season){}
         season VARCHAR(50)
     );
 */
+}
+
+// update/insert players for a given team into database (Get NFL Team Roster)
+
+
+
+// update/insert teams into database (Get NFL Teams)
+
+
+
+// update/insert team scores/ data for a match (Get NFL Game Box Score)
+
+
+
+// update/insert player stats (Get Player Information)
+
+
+
+
+
+?>
