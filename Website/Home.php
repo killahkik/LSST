@@ -28,6 +28,38 @@ if (isset($_SESSION['username'])) {
             <div class="loginmessage">
                 <?php echo $loginmessage; ?>
             </div>
+        </div> 
+        <!-- Top 5 Trending Teams Part-->
+        <div class="trending-teams">
+            <h2>Top 5 Trending Teams This Week</h2>
+            <?php
+            // Database connection details
+            $servername = "localhost";
+            $username = "root";      // Your database username
+            $password = "";          // Your database password
+            $dbname = "userData";    // Your database name
+            // Connect to the database
+            $conn = new mysqli($servername, $username, $password, $dbname);
+            // Check connection
+            if ($conn->connect_error) {
+                die("Connection failed: " . $conn->connect_error);
+            }
+            // Query to get the top 5 teams based on weekly popularity
+            $sql = "SELECT team_name, weekly_popularity FROM teams ORDER BY weekly_popularity DESC LIMIT 5";
+            $result = $conn->query($sql);
+            if ($result->num_rows > 0) {
+                echo "<ul>";
+                while ($row = $result->fetch_assoc()) {
+                echo "<li>" . htmlspecialchars($row['team_name']) . " - Popularity: " . htmlspecialchars($row['weekly_popularity']) . "</li>";
+                }
+                echo "</ul>";
+            } else {
+                echo "No trending teams available.";
+            }
+
+            // Close the database connection
+            $conn->close();
+            ?>
         </div>
         <div class="followedPlayers">
             <?php
