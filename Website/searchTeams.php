@@ -7,8 +7,8 @@ if (isset($_SESSION['username'])) {
     $loginmessage = "You are not logged in.";
 }
 include('updateTeamScores.php');
-$loadPhpTeamFunction = updateTeamsForLogo();
-$loadPhpTeamFunction = updateNFLTeams();
+$loadPhpTeamFunction1 = updateTeamsForLogo();
+$loadPhpTeamFunction2 = updateNFLTeams();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -34,7 +34,7 @@ $loadPhpTeamFunction = updateNFLTeams();
   <script>
       window.onload = myOnloadFunction;
       function myOnloadFunction(){
-          <?php $loadPhpTeamFunction; ?>
+          <?php $loadPhpTeamFunction1; $loadPhpTeamFunction2; ?>
       }
       // Function to submit the form using AJAX
       function submitForm(event) {
