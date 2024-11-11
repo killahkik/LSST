@@ -35,6 +35,7 @@ CREATE TABLE teams (
 
 CREATE TABLE followedPlayers (  
   id INT,
+  playerId INT not null,
   playerTeam VARCHAR(65) NOT NULL,
   playerName VARCHAR(65) NOT NULL,
   playerNumber INT not null,

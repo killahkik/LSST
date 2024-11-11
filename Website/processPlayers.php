@@ -57,14 +57,14 @@ if (isset($_POST['userInput'])) {
             echo "Number: " . $row['jerseyNum'] . "<br>";
             echo "Position: " . $row['pos'] . "<br><br>";
             // Form to send data to another table
-            echo "<input type='hidden' name='espnName' value='" . $row['espnName'] . "'>";
             echo "<form action='move_to_table.php' method='POST'>";
-            echo "<input type='hidden' name='playerID' value='" . $playerID . "'>";
-            echo "<input type='hidden' name='team' value='" . $row['team'] . "'>";
-            echo "<input type='hidden' name='jerseyNum' value='" . $row['jerseyNum'] . "'>";
-            echo "<input type='hidden' name='pos' value='" . $row['pos'] . "'>";
-
-            echo "<button type='submit'>Add to Followed Players</button>";
+                echo "<input type='hidden' name='user_id' value='" . $userID . "'>";
+                echo "<input type='hidden' name='espnName' value='" . $row['espnName'] . "'>";
+                echo "<input type='hidden' name='playerID' value='" . $playerID . "'>";
+                echo "<input type='hidden' name='team' value='" . $row['team'] . "'>";
+                echo "<input type='hidden' name='jerseyNum' value='" . $row['jerseyNum'] . "'>";
+                echo "<input type='hidden' name='pos' value='" . $row['pos'] . "'>";
+                echo "<button type='submit'>Add to Followed Players</button>";
             echo "</form><br>";
         }
 
