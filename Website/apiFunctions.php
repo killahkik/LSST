@@ -238,9 +238,7 @@ function updateGameInfo($game_ID) {
     $data = json_decode($response, true);
     $body = $data['body'];
     // Debug: print all data
-    //echo "<pre>";
     //print_r($data);
-    //echo "</pre>";
 
     // database connection
     $conn = new mysqli("localhost", "root", "", "userdata");
@@ -270,6 +268,16 @@ function updateGameInfo($game_ID) {
 
     $stmt = $conn->prepare($sql);
 
+    if (!isset($body["gameStatus"])) {
+        $stmt->close();
+        $conn->close();
+        return;
+    }
+    if ($body['gameStatus'] == "Scheduled") {
+        $stmt->close();
+        $conn->close();
+        return;
+    }
     $gameID = $body['gameID'];
     $gameStatus = $body['gameStatus'];
     $teamStats = json_encode($body['teamStats']);
@@ -283,6 +291,9 @@ function updateGameInfo($game_ID) {
     $homePts = $body['homePts'];
     $awayPts = $body['awayPts'];
     $currentPeriod = $body['currentPeriod'];
+
+
+
 
     // Bind parameters and execute
     $stmt->bind_param(

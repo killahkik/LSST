@@ -71,7 +71,7 @@ if (isset($_SESSION['username'])) {
         // display results
         if ($result->num_rows > 0) {
             echo "<table border='1'>";
-            echo "<tr><th>Game ID</th><th>Game Date</th><th>Home Team</th><th>Away Team</th><th>Home Points</th><th>Away Points</th></tr>";
+            echo "<tr><th>Game ID</th><th>Game Date</th><th>Home Team</th><th>Away Team</th><th>Game Page</th></tr>";
 
             while ($row = $result->fetch_assoc()) {
                 echo "<tr>";
@@ -79,7 +79,7 @@ if (isset($_SESSION['username'])) {
                 echo "<td>" . $row['gameDate'] . "</td>";
                 echo "<td>" . $row['homeName'] . "</td>";
                 echo "<td>" . $row['awayName'] . "</td>";
-                echo "<td>" . "<a href='gameView.php?gameID=" . $row['gameID'] . "'>" . "View Match" . "</a>" . "</td>";
+                echo "<td>" . "<a href='gameView.php?game_ID=" . $row['gameID'] . "'>" . "View Game" . "</a>" . "</td>";
                 echo "</tr>";
             }
 

@@ -9,13 +9,14 @@ if (isset($_SESSION['username'])) {
 }
 
 // check for game id in URL
-if (isset($_GET['gameID'])) {
-    $gameID = $_GET['gameID'];
-    updateGameInfo($gameID);
+if (isset($_GET['game_ID'])) {
+    $game_ID = $_GET['game_ID'];
+    //print_r($game)ID);
+    updateGameInfo($game_ID);
 } else {
-    // If no gameID is set in the URL
+    // If no game_ID is set in the URL
     echo "<p>No page ID provided.</p>";
-    $gameID = null;
+    $game_ID = null;
 }
 
 ?>
@@ -26,7 +27,7 @@ if (isset($_GET['gameID'])) {
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Player View</title>
+        <title>Game View</title>
     </head>
     <body>
     <div class="nav">
@@ -46,17 +47,29 @@ if (isset($_GET['gameID'])) {
                 if ($conn->connect_error) {
                     die("Connection failed: " . $conn->connect_error);
                 }
+
                 // get game data
                 $sql = "SELECT gameDate, teamIDHome, gameStatus, gameWeek, teamIDAway, gameTime, season, teamStats, scoringPlays, homeResult, awayResult, gameLocation, arena, homePts, awayPts, currentPeriod, homeName, awayName FROM games WHERE gameID = ?";
                 $stmt = $conn->prepare($sql);
-                $stmt->bind_param("s", $gameID);
+                $stmt->bind_param("s", $game_ID);
                 $stmt->execute();
                 $result = $stmt->get_result();
                 $row = $result->fetch_assoc();
                 // check results
-                if ($result->num_rows > 0 && isset($_GET['gameID'])) {
+                if ($result->num_rows > 0 && isset($_GET['game_ID'])) {
+                    
+                    if ($row["gameStatus"] == "Scheduled" || $row["gameStatus"] == null) {
+                        echo "<h1>Game has not started yet.</h1>";
+                        echo "<h1>" . $row['homeName'] . " vs " . $row['awayName'] . "</h1>";
+                        echo "<h2>Game Date: " . $row['gameDate'] . "," . $row['gameTime'] . "</h2>";
+
+                        
+                    } else {
+                        if ($row['gameStatus'] == "Final" || $row['gameStatus'] == "Completed" || $row['gameStatus'] == "Final/OT" || $row['gameStatus'] == "Final/SO") {
+                            echo "<h1>Game has ended.</h1>";
+                        }
                     // display data - names, date, time, location, score, stats, scoring plays
-                    echo "<h1>" . $row['homeName'] . "vs" . $row['awayName'] . "</h1>";
+                    echo "<h1>" . $row['homeName'] . " vs " . $row['awayName'] . "</h1>";
                     echo "<h2>" . $row['homePts'] .  "-" . $row['awayPts'] . "</h2>";
                     echo "<h3>Game Date: " . $row['gameDate'] . "," . $row['gameTime'] . "</h3>";
                     echo "<h3>Location: " . $row['gameLocation'] . "," . $row['arena'] . "</h3>";
@@ -72,6 +85,7 @@ if (isset($_GET['gameID'])) {
                     echo "<h3>Arena: " . $row['arena'] . "</h3>";
                     echo "<h3>Home Points: " . $row['homePts'] . "</h3>";
                     echo "<h3>Away Points: " . $row['awayPts'] . "</h3>";
+                    }
                 }
             ?>
         </div>
