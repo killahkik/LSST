@@ -31,7 +31,7 @@ if (isset($_POST['userInput'])) {
             $teamId = $row['teamId'];
             echo "Team: " . $row['teamName'] . "<br>";
             echo "Wins: " . $row['wins'] . "<br>";
-            echo "Loses: " . $row['loses'] . "<br>";
+            echo "Losses: " . $row['loses'] . "<br>";
             echo "<img src='" . $row['logo'] . "' alt='Team logo' style='width: 200px; height: 200px;'>";
             echo "<button onclick='loadPlayers($teamId)'>Show players</button> " . "<br><br>";
             echo "<div id='details-$teamId' style='display: none;'></div>";  // Placeholder for extra details

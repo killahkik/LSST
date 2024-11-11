@@ -25,7 +25,7 @@ if (isset($_GET['team_id'])) {
         echo "<ul>";
         //loops to grab every player, number, and position they are in and puts it in a list
         while ($row = $result->fetch_assoc()) {
-            echo "<li> Player: " . $row['espnName'] .", Number: " . $row['jerseyNum'] .", Position: ". $row['pos'] . "</li>";
+            echo "<li> Player:<a href=\"playerView.php?playerID=" . $row['playerID'] . "\"> " . $row['espnName'] ."</a>, Number: " . $row['jerseyNum'] .", Position: ". $row['pos'] . "</li>";
         }
         echo "</ul>";
     } else {

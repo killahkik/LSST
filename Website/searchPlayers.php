@@ -54,9 +54,9 @@ if (isset($_SESSION['username'])) {
 </script>
 
 <form id="inputForm" onsubmit="submitForm(event)">
-  <label for="userInput">Enter something:</label>
+  <label for="userInput">Search by name:</label>
   <input type="text" id="userInput" name="userInput" required>
-  <button type="submit">Submit</button>
+  <button type="submit">Search</button>
 </form>
 <div id="result"></div>
 
