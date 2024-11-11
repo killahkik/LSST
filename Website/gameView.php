@@ -59,32 +59,116 @@ if (isset($_GET['game_ID'])) {
                 if ($result->num_rows > 0 && isset($_GET['game_ID'])) {
                     
                     if ($row["gameStatus"] == "Scheduled" || $row["gameStatus"] == null) {
-                        echo "<h1>Game has not started yet.</h1>";
+                        echo "<div style='
+                        margin: 20px;
+                        padding: 20px;
+                        border: 2px solid black;
+                        border-radius: 10px;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        flex-direction: column;'>
+                        <h1>Game has not started yet.</h1>";
                         echo "<h1>" . $row['homeName'] . " vs " . $row['awayName'] . "</h1>";
-                        echo "<h2>Game Date: " . $row['gameDate'] . "," . $row['gameTime'] . "</h2>";
-
+                        echo "<h2>Game Date: " . date('Y-m-d', strtotime($row['gameDate'])) . "," . $row['gameTime'] . "</h2></div>";
+                        
                         
                     } else {
+                        echo "<div style='
+                        margin: 20px;
+                        padding: 20px;
+                        border: 2px solid black;
+                        border-radius: 10px;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        flex-direction: column;'>";
+                            if ($row['gameStatus'] == "Final" || $row['gameStatus'] == "Completed" || $row['gameStatus'] == "Final/OT" || $row['gameStatus'] == "Final/SO") {
+                                echo "<h1>Game has ended.</h1>";
+                            }
+                        // display data - names, date, time, location, score, stats, scoring plays
+                        echo "<h1>" . $row['homeName'] . " vs " . $row['awayName'] . "</h1>";
+                        echo "<h2>" . $row['homePts'] .  "-" . $row['awayPts'] . "</h2>";
+                        // if game finished
                         if ($row['gameStatus'] == "Final" || $row['gameStatus'] == "Completed" || $row['gameStatus'] == "Final/OT" || $row['gameStatus'] == "Final/SO") {
-                            echo "<h1>Game has ended.</h1>";
+                            echo "<h2>" . $row['homeResult'] . " - " . $row['awayResult'] . "</h2>";
                         }
-                    // display data - names, date, time, location, score, stats, scoring plays
-                    echo "<h1>" . $row['homeName'] . " vs " . $row['awayName'] . "</h1>";
-                    echo "<h2>" . $row['homePts'] .  "-" . $row['awayPts'] . "</h2>";
-                    echo "<h3>Game Date: " . $row['gameDate'] . "," . $row['gameTime'] . "</h3>";
-                    echo "<h3>Location: " . $row['gameLocation'] . "," . $row['arena'] . "</h3>";
-                    echo "<h3>Game Status: " . $row['gameStatus'] . "</h3>";
-                    echo "<h3>Game Week: " . $row['gameWeek'] . "</h3>";
-                    echo "<h3>Season: " . $row['season'] . "</h3>";
-                    echo "<h3>Current Period: " . $row['currentPeriod'] . "</h3>";
-                    echo "<h3>Home Team Stats: " . $row['teamStats'] . "</h3>";
-                    echo "<h3>Away Team Stats: " . $row['teamStats'] . "</h3>";
-                    echo "<h3>Scoring Plays: " . $row['scoringPlays'] . "</h3>";
-                    echo "<h3>Home Result: " . $row['homeResult'] . "</h3>";
-                    echo "<h3>Away Result: " . $row['awayResult'] . "</h3>";
-                    echo "<h3>Arena: " . $row['arena'] . "</h3>";
-                    echo "<h3>Home Points: " . $row['homePts'] . "</h3>";
-                    echo "<h3>Away Points: " . $row['awayPts'] . "</h3>";
+                        echo "</div>";
+                        echo "<div style='
+                        margin: 20px;
+                        padding: 20px;
+                        border: 2px solid black;
+                        border-radius: 10px;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        flex-direction: column;'>";
+                        echo "<h3>Game Date: " . date('Y-m-d', strtotime($row['gameDate'])) . "," . $row['gameTime'] . "</h3>";
+                        echo "<h3>Location: " . $row['gameLocation'] . "," . $row['arena'] . "</h3>";
+                        echo "<h3>Game Status: " . $row['gameStatus'] . "</h3>";
+                        echo "<h3>Game Week: " . $row['gameWeek'] . "</h3>";
+                        echo "<h3>Season: " . $row['season'] . "</h3>";
+                        if ($row["currentPeriod"] != "Final") {
+                            echo "<h3>Current Period: " . $row['currentPeriod'] . "</h3>";
+                        }
+                        echo "</div>";
+                        // team stats
+                        $stats = json_decode($row['teamStats'], true);
+                        $awayTeamStats = $stats['away'];
+                        $homeTeamStats = $stats['home'];
+                        echo "<div style='
+                        margin: 20px;
+                        padding: 20px;
+                        border: 2px solid black;
+                        border-radius: 10px;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        flex-direction: column;'>";
+                        echo "<table border='1'>";
+                        echo "<tr><th>Team</th><th>Total Yards</th><th>Penalties</th><th>Possession</th><th>Total Plays</th></tr>";
+                        echo "<tr>";
+                        echo "<td>" . $row['homeName'] . "</td>";
+                        echo "<td>" . $homeTeamStats['totalYards'] . "</td>";
+                        echo "<td>" . $homeTeamStats['penalties'] . "</td>";
+                        echo "<td>" . $homeTeamStats['possession'] . "</td>";
+                        echo "<td>". $awayTeamStats['totalPlays'] . "</td>";
+                        echo "</tr>";
+
+                        echo "<tr>";
+                        echo "<td>" . $row['awayName'] . "</td>";
+                        echo "<td>" . $awayTeamStats['totalYards'] . "</td>";
+                        echo "<td>" . $awayTeamStats['penalties'] . "</td>";
+                        echo "<td>" . $awayTeamStats['possession'] . "</td>";
+                        echo "<td>". $homeTeamStats['totalPlays'] . "</td>";
+                        echo "</tr>";
+                        echo "</table>";
+                        echo "</div>";
+                        $scoringPlays = json_decode($row['scoringPlays'], true);
+
+                        echo "<div style='
+                        margin: 20px;
+                        padding: 20px;
+                        border: 2px solid black;
+                        border-radius: 10px;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        flex-direction: column;'>";
+                        echo "<h3>Home Points: " . $row['homePts'] . "</h3>";
+                        echo "<h3>Away Points: " . $row['awayPts'] . "</h3>";
+                        echo "<h3>Scoring Plays:</h3>";
+                        foreach ($scoringPlays as $play) {
+                            echo "<div class='scoring-play' style='margin-bottom: 15px; padding: 10px; border: 1px solid;'>";
+                            echo "<strong>Team:</strong> " . $play['team'] . "<br>";
+                            echo "<strong>Score:</strong> " . $play['score'] . "<br>";
+                            echo "<strong>Period:</strong> " . $play['scorePeriod'] . " | ";
+                            echo "<strong>Time:</strong> " . $play['scoreTime'] . "<br>";
+                            echo "<strong>Home Score:</strong> " . $play['homeScore'] . " | ";
+                            echo "<strong>Away Score:</strong> " . $play['awayScore'] . "<br>";
+                            echo "</div>";
+                        }
+                        echo "</div>";
                     }
                 }
             ?>

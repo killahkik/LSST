@@ -7,7 +7,8 @@ if (isset($_SESSION['username'])) {
 } else {
     $loginmessage = "You are not logged in.";
 }
-
+// update games
+getGames("all",2024);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -76,7 +77,7 @@ if (isset($_SESSION['username'])) {
             while ($row = $result->fetch_assoc()) {
                 echo "<tr>";
                 echo "<td>" . $row['gameID'] . "</td>";
-                echo "<td>" . $row['gameDate'] . "</td>";
+                echo "<td>" . date('Y-m-d', strtotime($row['gameDate'])) . "</td>";
                 echo "<td>" . $row['homeName'] . "</td>";
                 echo "<td>" . $row['awayName'] . "</td>";
                 echo "<td>" . "<a href='gameView.php?game_ID=" . $row['gameID'] . "'>" . "View Game" . "</a>" . "</td>";

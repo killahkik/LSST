@@ -77,7 +77,7 @@ function getGames($week, $season){
 
             // Bind parameters and execute
             $stmt->bind_param(
-                "sssssisss", 
+                "sssssssss", 
                 $gameID, 
                 $gameDate, 
                 $espnID, 
