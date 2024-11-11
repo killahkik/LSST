@@ -8,6 +8,7 @@ if (isset($_SESSION['username'])) {
     $loginmessage = "You are not logged in.";
 }
 // update games
+include "apiFunctions.php";
 getGames("all",2024);
 ?>
 <!DOCTYPE html>
