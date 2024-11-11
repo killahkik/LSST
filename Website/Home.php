@@ -127,7 +127,11 @@ if (isset($_SESSION['username'])) {
                 }
 
             }else {
+                if ($_SESSION['username'] != null){
                 echo "No Followed players for User: '" . htmlspecialchars($userID) . "'";
+                } else {
+                    echo "Please login to view followed players.";
+                }
             }
             $stmt-> close();
             $conn->close();
