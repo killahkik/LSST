@@ -50,8 +50,19 @@ CREATE TABLE games (
   gameStatus VARCHAR(50),
   gameWeek VARCHAR(255),
   teamIDAway VARCHAR(255),
-  gameTime TIME,
-  season VARCHAR(50)
+  gameTime VARCHAR(255),
+  season VARCHAR(50),
+  teamStats JSON,
+  scoringPlays JSON,
+  homeResult VARCHAR(50),
+  awayResult VARCHAR(50),
+  gameLocation VARCHAR(255),
+  arena VARCHAR(255),
+  homePts INT,
+  awayPts INT,
+  currentPeriod VARCHAR(50),
+  homeName VARCHAR(50),
+  awayName VARCHAR(50)
 );
 
 CREATE TABLE liveGameData (  
