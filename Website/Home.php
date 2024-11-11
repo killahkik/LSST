@@ -1,11 +1,14 @@
 <?php
 session_start();
 $loginmessage = "";
+$usersName = "";
 if (isset($_SESSION['username'])) {
     $loginmessage = "Logged in as: " . $_SESSION['username'] . ". <a href='logout.php'>Logout</a>";
+    $usersName = $_SESSION['username'];
 } else {
     $loginmessage = "You are not logged in.";
     $_SESSION['username'] = null;
+    $usersName = null;
 }
 
 ?>
@@ -45,23 +48,45 @@ if (isset($_SESSION['username'])) {
                 die("Connection failed: " . $conn->connect_error);
             }
             // Query to get the top 5 teams based on weekly popularity
-            $sql = "SELECT team_name, weekly_popularity FROM teams ORDER BY weekly_popularity DESC LIMIT 5";
+            $sql = "SELECT * FROM teams";
             $result = $conn->query($sql);
+            $rows=[];
             if ($result->num_rows > 0) {
-                echo "<ul>";
+                //echo "<ul>";
                 while ($row = $result->fetch_assoc()) {
-                echo "<li>" . htmlspecialchars($row['team_name']) . " - Popularity: " . htmlspecialchars($row['weekly_popularity']) . "</li>";
+                    $difference= abs($row['wins']-$row['loses']);
+                    $row['difference'] = $difference;
+                    $rows[] = $row;
+                    //echo "<li>" . htmlspecialchars($row['team_name']) . " - Popularity: " . htmlspecialchars($row['weekly_popularity']) . "</li>";
                 }
-                echo "</ul>";
-            } else {
-                echo "No trending teams available.";
+                //debugging code to check if array was properly filled
+                /*
+                echo "<pre>";
+                print_r($rows);
+                echo "</pre>";
+                */
+                //echo "</ul>";
+            }
+
+            // Sort rows by 'difference' in descending order
+            usort($rows,function ($w, $l){
+                if($w['difference'] == $l['difference']){
+                    return 0;
+                }
+                return ($w['difference'] > $l['difference']) ? -1 : 1;
+            });
+            $top5 = array_slice($rows, 0, 5);
+            foreach ($top5 as $index => $row) {
+                echo "Rank " . ($index + 1) . ": " . $row['teamName'] . ", wins = " . $row['wins'] . ", losses = " . $row['loses'] . "<br><br>";
             }
 
             // Close the database connection
             $conn->close();
             ?>
         </div>
+
         <div class="followedPlayers">
+            <h2> <?php echo $usersName?> Followed Player List:</h2>
             <?php
             // Database connection details
             $servername = "localhost";
@@ -83,6 +108,7 @@ if (isset($_SESSION['username'])) {
                     $userID= $row1['id'];
                 }
             }
+
             $stmt1->close();
             $sql = "SELECT * FROM followedPlayers WHERE id LIKE ?";
             $stmt = $conn->prepare($sql);
@@ -92,7 +118,8 @@ if (isset($_SESSION['username'])) {
             $result = $stmt->get_result();
             if ($result->num_rows > 0) {
                 while ($row = $result->fetch_assoc()) {
-                    echo "ID: " . $userID . "<br>";
+                    //echo "ID: " . $userID . "<br>";
+                    $playerID = $row['playerName'];
                     echo "Team: " . $row['playerTeam'] . "<br>";
                     echo "Name: " . $row['playerName'] . "<br>";
                     echo "Number: " . $row['playerNumber'] . "<br>";
@@ -100,11 +127,12 @@ if (isset($_SESSION['username'])) {
                 }
 
             }else {
-                echo "No results found for '" . htmlspecialchars($userID) . "'";
+                echo "No Followed players for User: '" . htmlspecialchars($userID) . "'";
             }
             $stmt-> close();
             $conn->close();
             ?>
+
         </div>
 
     </body>

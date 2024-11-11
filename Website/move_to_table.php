@@ -13,16 +13,17 @@ if ($conn->connect_error) {
 }
 
 // Check if the necessary data is received
-if (isset($_POST['user_id']) && isset($_POST['playerTeam']) && isset($_POST['playerName']) && isset($_POST['playerNumber']) && isset($_POST['playerPosition'])) {
+if (isset($_POST['user_id']) && isset($_POST['team']) && isset($_POST['espnName']) && isset($_POST['jerseyNum']) && isset($_POST['pos']) && isset($_POST['playerID'])) {
     $id = $_POST['user_id'];
-    $playerName = $_POST['playerTeam'];
-    $playerTeam = $_POST['playerName'];
-    $playerNumber = $_POST['playerNumber'];
-    $playerPosition = $_POST['playerPosition'];
+    $playerId = $_POST['playerID'];
+    $playerName = $_POST['team'];
+    $playerTeam = $_POST['espnName'];
+    $playerNumber = $_POST['jerseyNum'];
+    $playerPosition = $_POST['pos'];
     // Insert into the different table (e.g., `archived_users`)
-    $sql = "INSERT INTO followedplayers (id, playerTeam, playerName, playerNumber, playerPosition) VALUES (?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO followedplayers (id, playerId, playerTeam, playerName, playerNumber, playerPosition) VALUES (?, ?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("issis",$id, $playerName, $playerTeam, $playerNumber, $playerPosition);
+    $stmt->bind_param("iissis",$id, $playerId, $playerName, $playerTeam, $playerNumber, $playerPosition);
 
     if ($stmt->execute()) {
         // Record moved successfully - Redirect with success message
@@ -54,6 +55,5 @@ if (isset($_POST['user_id']) && isset($_POST['playerTeam']) && isset($_POST['pla
         echo "playerPosition is not set.";
     }
 }
-
 $conn->close();
 ?>
