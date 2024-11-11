@@ -59,6 +59,19 @@ if (isset($_GET['gameID'])) {
                     echo "<h1>" . $row['homeName'] . "vs" . $row['awayName'] . "</h1>";
                     echo "<h2>" . $row['homePts'] .  "-" . $row['awayPts'] . "</h2>";
                     echo "<h3>Game Date: " . $row['gameDate'] . "," . $row['gameTime'] . "</h3>";
+                    echo "<h3>Location: " . $row['gameLocation'] . "," . $row['arena'] . "</h3>";
+                    echo "<h3>Game Status: " . $row['gameStatus'] . "</h3>";
+                    echo "<h3>Game Week: " . $row['gameWeek'] . "</h3>";
+                    echo "<h3>Season: " . $row['season'] . "</h3>";
+                    echo "<h3>Current Period: " . $row['currentPeriod'] . "</h3>";
+                    echo "<h3>Home Team Stats: " . $row['teamStats'] . "</h3>";
+                    echo "<h3>Away Team Stats: " . $row['teamStats'] . "</h3>";
+                    echo "<h3>Scoring Plays: " . $row['scoringPlays'] . "</h3>";
+                    echo "<h3>Home Result: " . $row['homeResult'] . "</h3>";
+                    echo "<h3>Away Result: " . $row['awayResult'] . "</h3>";
+                    echo "<h3>Arena: " . $row['arena'] . "</h3>";
+                    echo "<h3>Home Points: " . $row['homePts'] . "</h3>";
+                    echo "<h3>Away Points: " . $row['awayPts'] . "</h3>";
                 }
             ?>
         </div>

@@ -80,7 +80,7 @@ $loadPhpTeamFunction2 = updateNFLTeams();
 
       <input type="text" id="userInput" name="userInput" required>
       <button type="submit">Submit</button>
-      <p type="small-description">can use city or the team itself or togeather ex: arizona</p>
+      <p type="small-description">Can use city or the team itself or together. Ex: Arizona</p>
   </form>
   <div id="result"></div>
 </body>

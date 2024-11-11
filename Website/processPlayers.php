@@ -64,7 +64,7 @@ if (isset($_POST['userInput'])) {
             echo "<input type='hidden' name='jerseyNum' value='" . $row['jerseyNum'] . "'>";
             echo "<input type='hidden' name='pos' value='" . $row['pos'] . "'>";
 
-            echo "<button type='submit'>Move to Other Table</button>";
+            echo "<button type='submit'>Add to Followed Players</button>";
             echo "</form><br>";
         }
 
