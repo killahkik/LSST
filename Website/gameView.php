@@ -59,30 +59,28 @@ if (isset($_GET['game_ID'])) {
                 if ($result->num_rows > 0 && isset($_GET['game_ID'])) {
                     
                     if ($row["gameStatus"] == "Scheduled" || $row["gameStatus"] == null) {
-                        echo "<div style='
-                        margin: 20px;
-                        padding: 20px;
-                        border: 2px solid black;
-                        border-radius: 10px;
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                        flex-direction: column;'>
+                        echo "<div class = 'gamebox'>
                         <h1>Game has not started yet.</h1>";
                         echo "<h1>" . $row['homeName'] . " vs " . $row['awayName'] . "</h1>";
-                        echo "<h2>Game Date: " . date('Y-m-d', strtotime($row['gameDate'])) . "," . $row['gameTime'] . "</h2></div>";
-                        
+                        echo "</div>";
+                        echo "<div class = 'gamebox'>";
+                        echo "<h3>Current Weather</h3>";
+                        $venue = getVenueForUpcoming($game_ID);
+                        $weather = weatherConditions($venue);
+                        echo "<h3>Temperature: " . $weather[0] . "°F</h3>";
+                        echo "<h3>Rel. Humidity: ". $weather[1] ." %</h3>";
+                        echo "<h3>Precipitation: ". $weather[2] ." Inches</h3>";
+                        echo "</div>";
+                        echo "<div class = 'gamebox'>";
+                        echo "<h3>Game Date: " . date('Y-m-d', strtotime($row['gameDate'])) . "," . $row['gameTime'] . "</h3>";
+                        echo "<h3>Location: " . $venue . "</h3>";
+                        echo "<h3>Game Status: " . $row['gameStatus'] . "</h3>";
+                        echo "<h3>Game Week: " . $row['gameWeek'] . "</h3>";
+                        echo "<h3>Season: " . $row['season'] . "</h3>";
+                        echo "</div>";
                         
                     } else {
-                        echo "<div style='
-                        margin: 20px;
-                        padding: 20px;
-                        border: 2px solid black;
-                        border-radius: 10px;
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                        flex-direction: column;'>";
+                        echo "<div class = 'gamebox'>";
                             if ($row['gameStatus'] == "Final" || $row['gameStatus'] == "Completed" || $row['gameStatus'] == "Final/OT" || $row['gameStatus'] == "Final/SO") {
                                 echo "<h1>Game has ended.</h1>";
                             }
@@ -94,17 +92,9 @@ if (isset($_GET['game_ID'])) {
                             echo "<h2>" . $row['homeResult'] . " - " . $row['awayResult'] . "</h2>";
                         }
                         echo "</div>";
-                        echo "<div style='
-                        margin: 20px;
-                        padding: 20px;
-                        border: 2px solid black;
-                        border-radius: 10px;
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                        flex-direction: column;'>";
+                        echo "<div class = 'gamebox'>";
                         echo "<h3>Game Date: " . date('Y-m-d', strtotime($row['gameDate'])) . "," . $row['gameTime'] . "</h3>";
-                        echo "<h3>Location: " . $row['gameLocation'] . "," . $row['arena'] . "</h3>";
+                        echo "<h3>Location: " . $row['gameLocation'] . ", " . $row['arena'] . "</h3>";
                         echo "<h3>Game Status: " . $row['gameStatus'] . "</h3>";
                         echo "<h3>Game Week: " . $row['gameWeek'] . "</h3>";
                         echo "<h3>Season: " . $row['season'] . "</h3>";
@@ -112,19 +102,18 @@ if (isset($_GET['game_ID'])) {
                             echo "<h3>Current Period: " . $row['currentPeriod'] . "</h3>";
                         }
                         echo "</div>";
+                        echo "<div class = 'gamebox'>";
+                        echo "<h3>Current Weather</h3>";
+                        $weather = weatherConditions($row['gameLocation']);
+                        echo "<h3>Temperature: " . $weather[0] . "°F</h3>";
+                        echo "<h3>Rel. Humidity: ". $weather[1] ." %</h3>";
+                        echo "<h3>Precipitation: ". $weather[2] ." Inches</h3>";
+                        echo "</div>";
                         // team stats
                         $stats = json_decode($row['teamStats'], true);
                         $awayTeamStats = $stats['away'];
                         $homeTeamStats = $stats['home'];
-                        echo "<div style='
-                        margin: 20px;
-                        padding: 20px;
-                        border: 2px solid black;
-                        border-radius: 10px;
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                        flex-direction: column;'>";
+                        echo "<div class = 'gamebox'>";
                         echo "<table border='1'>";
                         echo "<tr><th>Team</th><th>Total Yards</th><th>Penalties</th><th>Possession</th><th>Total Plays</th></tr>";
                         echo "<tr>";
@@ -146,15 +135,7 @@ if (isset($_GET['game_ID'])) {
                         echo "</div>";
                         $scoringPlays = json_decode($row['scoringPlays'], true);
 
-                        echo "<div style='
-                        margin: 20px;
-                        padding: 20px;
-                        border: 2px solid black;
-                        border-radius: 10px;
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                        flex-direction: column;'>";
+                        echo "<div class = 'gamebox'>";
                         echo "<h3>Home Points: " . $row['homePts'] . "</h3>";
                         echo "<h3>Away Points: " . $row['awayPts'] . "</h3>";
                         echo "<h3>Scoring Plays:</h3>";

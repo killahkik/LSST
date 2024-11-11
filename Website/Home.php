@@ -34,7 +34,7 @@ if (isset($_SESSION['username'])) {
         </div> 
         <!-- Top 5 Trending Teams Part-->
         <div class="trending-teams">
-            <h2>Top 5 Trending Teams This Week</h2>
+            <h2>Top 5 Performing Teams</h2>
             <?php
             // Database connection details
             $servername = "localhost";

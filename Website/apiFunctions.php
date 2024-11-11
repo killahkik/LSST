@@ -410,8 +410,69 @@ function updateTeamNames() {
     $conn->close();
 
 }
+
+function getVenueForUpcoming( $gameID ) {
+    // use the gameID to get the venue from api
+    $curl = curl_init();
+
+    curl_setopt_array($curl, [
+        CURLOPT_URL => "https://tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com/getNFLGameInfo?gameID=$gameID",
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => "",
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 30,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => "GET",
+        CURLOPT_HTTPHEADER => [
+            "x-rapidapi-host: tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com",
+            "x-rapidapi-key: ec84d842dcmshe4d04e0ec4d508ep19ffa1jsn71581cd24e76"
+        ],
+    ]);
+
+    $response = curl_exec($curl);
+    $err = curl_error($curl);
+
+    curl_close($curl);
+
+    if ($err) {
+        echo "cURL Error #:" . $err;
+    }
+
+    $data = json_decode($response, true);
+    $body = $data['body'];
+    $venue = $body['venue'];
+    return $venue;
+}
+
+function locationToCoordinates($location) {
+    $location = urlencode($location);
+    $url = "https://api.opencagedata.com/geocode/v1/json?q=$location&key=24c6a206f91d4ca6859276a29424ce65";
+    $curl = curl_init();
+    curl_setopt($curl, CURLOPT_URL, $url);
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+    $result = curl_exec($curl);
+    curl_close($curl);
+    $data = json_decode($result, true);
+    $lat = $data['results'][0]['geometry']['lat'];
+    $lng = $data['results'][0]['geometry']['lng'];
+    return [$lat, $lng];
+}
     
-
-
-
+function weatherConditions($location){
+    $coordinates = locationToCoordinates($location);
+    $latitude = $coordinates[0];
+    $longitude = $coordinates[1];
+    $url = "https://api.open-meteo.com/v1/forecast?current=temperature_2m,relative_humidity_2m,precipitation,weather_code&temperature_unit=fahrenheit&wind_speed_unit=mph&precipitation_unit=inch&timezone=auto&forecast_days=1&latitude=$latitude&longitude=$longitude";
+    //print_r($url);
+    $curl = curl_init();
+    curl_setopt($curl, CURLOPT_URL, $url);
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+    $result = curl_exec($curl);
+    curl_close($curl);
+    $data = json_decode($result, true);
+    $temp = $data["current"]["temperature_2m"];
+    $relHumidity = $data["current"]["relative_humidity_2m"];
+    $precipitation = $data["current"]["precipitation"];
+    return [$temp, $relHumidity, $precipitation];
+}
 ?>
