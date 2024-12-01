@@ -6,6 +6,7 @@ CREATE TABLE user (
   email VARCHAR(65) NOT NULL,
   username VARCHAR(65) NOT NULL,
   password VARCHAR(65) NOT NULL,
+  money INT 100,
   primary key (id)
 );
 
@@ -77,6 +78,17 @@ CREATE TABLE liveGameData (
   points INT NOT NULL,
   playerTeam VARCHAR(65) NOT NULL
 );
+create table betting (
+	gameID VARCHAR(255) PRIMARY KEY,
+	userName VARCHAR(255),
+	homeBet VARCHAR(50),
+  	awayBet VARCHAR(50),
+  	gameStatus VARCHAR(50)
+	
+);
+ALTER TABLE userdata.`user` ADD money;
+
+update `user` set money =200 
 
 ALTER TABLE teams 
 DROP COLUMN logo;

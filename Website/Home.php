@@ -10,7 +10,79 @@ if (isset($_SESSION['username'])) {
     $_SESSION['username'] = null;
     $usersName = null;
 }
+function checkResults(){
+    $servername = "localhost";
+    $username = "root";      // Your database username
+    $password = "";          // Your database password
+    $dbname = "userData";
+    $conn = new mysqli($servername, $username, $password, $dbname);
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+    $usersName = $_SESSION['username'];
+    $gameID = "";
+    // Query to get the top 5 teams based on weekly popularity
+    $sql = "SELECT gameID FROM betting WHERE username = ?";
+    $stmt1 = $conn->prepare($sql);
+    $stmt1->bind_param("s", $usersName);
+    $stmt1->execute();
+    $result = $stmt1->get_result();
+    if ($result->num_rows > 0) {
+        while ($row1 = $result->fetch_assoc()) {
+            $gameID = $row1['gameID'];
+        }
+        $sql1 = "SELECT * FROM game WHERE gameID = ?";
+        $stmt2 = $conn->prepare($sql1);
+        $stmt2->bind_param("s", $gameID);
+        $stmt2->execute();
+        $result = $stmt1->get_result();
+        if ($result->num_rows > 0) {
+            while ($row1 = $result->fetch_assoc()) {
+                if($row1['gameStatus'] == "Completed"){
+                    $homeCheck = $row1['homeResult'];
+                    updateBet($homeCheck, $gameID);
+                }
+            }
+        }
+    }
+    $conn->close();
+}
+function updateBet($homeCheck, $gameID){
+    $servername = "localhost";
+    $username = "root";      // Your database username
+    $password = "";          // Your database password
+    $dbname = "userData";
+    $conn = new mysqli($servername, $username, $password, $dbname);
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+    $usersName = $_SESSION['username'];
+    $betAmount= 0;
+    $sql = "SELECT * FROM betting WHERE username = ? AND gameID = ?";
+    $stmt1 = $conn->prepare($sql);
+    $stmt1->bind_param("ss", $usersName, $gameID);
+    $stmt1->execute();
+    $result = $stmt1->get_result();
+    if ($result->num_rows > 0) {
+        while ($row1 = $result->fetch_assoc()) {
+            if($homeCheck=='W'){
+                $betAmount = $row1['homeBet'];
+            }else{
+                $betAmount = $row1['awayBet'];
+            }
+        }
+    }
+    $sql = "UPDATE betting SET awayBet = 0, homeBet = 0 WHERE username = ? AND gameID = ?";
+    $stmt1 = $conn->prepare($sql);
+    $stmt1->bind_param("ss", $usersName, $gameID);
+    $stmt1->execute();
 
+    $sql1 = "UPDATE user SET money = ? WHERE username = ?";
+    $stmt1 = $conn->prepare($sql1);
+    $stmt1->bind_param("is", $betAmount,$usersName);
+    $stmt1->execute();
+    $conn->close();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -84,9 +156,59 @@ if (isset($_SESSION['username'])) {
             $conn->close();
             ?>
         </div>
+        <div class="moneyGames">
+            <h2> <?php echo $usersName?>'s Upcoming Game Bets </h2>
+            <?php
+            // Database connection details
+            $servername = "localhost";
+            $username = "root";      // Your database username
+            $password = "";          // Your database password
+            $dbname = "userData";  // Your database name
 
+            // Connect to the database
+            $conn = new mysqli($servername, $username, $password, $dbname);
+            $userID= $_SESSION['username'];
+            $usersMax= 0;
+            $sql1 = "SELECT * FROM user WHERE username LIKE ?";
+            $stmt1 = $conn->prepare($sql1);
+            $searchParam1 = "%" . $userID . "%";
+            $stmt1->bind_param("s", $searchParam1);
+            $stmt1->execute();
+            $result = $stmt1->get_result();
+            if ($result->num_rows > 0) {
+                while ($row1 = $result->fetch_assoc()) {
+                    $usersMax= $row1['money'];
+                }
+            }
+
+            $stmt1->close();
+            $sql = "SELECT * FROM betting WHERE username LIKE ?";
+            $stmt = $conn->prepare($sql);
+            $searchParam = "%" . $userID . "%";
+            $stmt->bind_param("s", $searchParam);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            if ($result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                    //echo "ID: " . $userID . "<br>";
+                    echo "GameId: " . $row['gameID'] . "<br>";
+                    echo "Home Bet: " . $row['homeBet'] . ", Away Bet: " . $row['awayBet'] . "<br><br>";
+
+                }
+
+            }else {
+                if ($_SESSION['username'] != null){
+                    echo "No Followed players for User: '" . htmlspecialchars($userID) . "'";
+                } else {
+                    echo "Please login to view followed players.";
+                }
+            }
+            $stmt-> close();
+            $conn->close();
+            ?>
+        </div>
         <div class="followedPlayers">
-            <h2> <?php echo $usersName?> Followed Player List:</h2>
+            <h2> <?php echo $usersName?>'s Followed Player List:</h2>
             <?php
             // Database connection details
             $servername = "localhost";

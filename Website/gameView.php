@@ -7,7 +7,8 @@ if (isset($_SESSION['username'])) {
 } else {
     $loginmessage = "You are not logged in.";
 }
-
+$game_ID = "";
+$teamVote= "";
 // check for game id in URL
 if (isset($_GET['game_ID'])) {
     $game_ID = $_GET['game_ID'];
@@ -18,7 +19,92 @@ if (isset($_GET['game_ID'])) {
     echo "<p>No page ID provided.</p>";
     $game_ID = null;
 }
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['updateButton'])){
+    updateBets($game_ID);
+}
+function updateBets($gameid){
+    $conn = new mysqli("localhost", "root", "", "userdata");
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+    $userName = $_SESSION['username'];
+    $teamVote= $_POST['teamVote'];
+    $sql = "SELECT * FROM user WHERE username = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $userName);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $money = "";
+    while ($row1 = $result->fetch_assoc()) {
+        $money = $row1['money'];
+    }
+    if ($money > 0){
+        $sql = "UPDATE user SET money = money - 100 WHERE username = ?;";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("s", $userName);
+        $stmt->execute();
+        //see if betting session has been made
+        $sql = "SELECT * FROM betting WHERE username = ? AND gameID = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ss", $userName, $gameid);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if ($result->num_rows > 0) {
+            //changes betting data table
+            $sql = "SELECT * FROM games WHERE gameID = ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("s", $gameid);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            if ($result->num_rows > 0) {
+                while ($row1 = $result->fetch_assoc()) {
+                    if($row1['homeName'] == $teamVote ){
+                        $sql = "UPDATE betting SET homeBet = homeBet + 100 WHERE username = ? ;";
+                        $stmt = $conn->prepare($sql);
+                        $stmt->bind_param("s", $userName);
+                        $stmt->execute();
+                    }else{
+                        $sql = "UPDATE betting SET awayBet = awayBet + 100 WHERE username = ? ;";
+                        $stmt = $conn->prepare($sql);
+                        $stmt->bind_param("s", $userName);
+                        $stmt->execute();
 
+                    }
+                }
+            }
+        }
+        else{
+            $homeBet=0;
+            $awayBet=0;
+            $sql = "INSERT INTO betting(gameID,userName,homeBet,awayBet) VALUES (?,?,?,?)";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("ssii", $gameid,$userName,$homeBet,$awayBet);
+            $stmt->execute();
+            //changes betting data table
+            $sql1 = "SELECT * FROM games WHERE gameID = ?";
+            $stmt1 = $conn->prepare($sql1);
+            $stmt1->bind_param("s", $gameid);
+            $stmt1->execute();
+            $result = $stmt1->get_result();
+            if ($result->num_rows > 0) {
+                while ($row1 = $result->fetch_assoc()) {
+                    if($row1['homeName'] == $teamVote ){
+                        $sql = "UPDATE betting SET homeBet = homeBet + 100 WHERE username = ? ;";
+                        $stmt = $conn->prepare($sql);
+                        $stmt->bind_param("s", $userName);
+                        $stmt->execute();
+                    }else{
+                        $sql = "UPDATE betting SET awayBet = awayBet + 100 WHERE username = ? ;";
+                        $stmt = $conn->prepare($sql);
+                        $stmt->bind_param("s", $userName);
+                        $stmt->execute();
+
+                    }
+                }
+            }
+        }
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -62,6 +148,23 @@ if (isset($_GET['game_ID'])) {
                         echo "<div class = 'gamebox'>
                         <h1>Game has not started yet.</h1>";
                         echo "<h1>" . $row['homeName'] . " vs " . $row['awayName'] . "</h1>";
+                        echo "</div>";
+                        echo "<div class = 'gamebox'>
+                        <h1>Which team will win! Place your bet by 100 each time!</h1>";
+                        echo "<h1> 
+                                <form method='POST'>
+                                <input type='hidden' name='gameID' value='" .$game_ID. "'>
+                                <input type='hidden' name='teamVote' value='" .$row['homeName']. "'>
+                                <button type='submit' name='updateButton'>" . $row['homeName'] . "</button>
+                                </form> 
+                                   vs
+                                <form method='POST'>
+                                <input type='hidden' name='gameID' value='" .$game_ID. "'>
+                                <input type='hidden' name='teamVote' value='" .$row['awayName']. "'>
+                                <button type='submit' name='updateButton'>" . $row['awayName'] . "</button>
+                                </form> 
+                              </h1>";
+
                         echo "</div>";
                         echo "<div class = 'gamebox'>";
                         echo "<h3>Current Weather</h3>";
@@ -151,6 +254,9 @@ if (isset($_GET['game_ID'])) {
                         }
                         echo "</div>";
                     }
+                }
+                function updateWinner(){
+
                 }
             ?>
         </div>

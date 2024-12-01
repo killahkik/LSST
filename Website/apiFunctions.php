@@ -206,8 +206,25 @@ function getPlayers(){
 
 // update/insert teams into database (Get NFL Teams)
 
+function addBettingToTables(){
+    $conn = new mysqli("localhost", "root", "", "userdata");
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+    $sql = "CREATE TABLE BETTING ( gameID VARCHAR(255) PRIMARY KEY, userName VARCHAR(255), homeBet VARCHAR(50), awayBet VARCHAR(50),gameStatus VARCHAR(50));";
+    $stmt1 = $conn->prepare($sql);
+    $stmt1->execute();
 
+    $sql = "ALTER TABLE userdata.`user` ADD money ";
+    $stmt1 = $conn->prepare($sql);
+    $stmt1->execute();
 
+    $sql = "update `user` set money =200 ";
+    $stmt1 = $conn->prepare($sql);
+    $stmt1->execute();
+
+}
+//addBettingToTables();
 // update/insert team scores/ data for a match (Get NFL Game Box Score)
 function updateGameInfo($game_ID) {
         $curl = curl_init();
