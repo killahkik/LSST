@@ -1,12 +1,12 @@
 CREATE DATABASE userData;
 USE userData;
 
-CREATE TABLE user (  
+CREATE TABLE `user` (  
   id INT NOT NULL AUTO_INCREMENT,
   email VARCHAR(65) NOT NULL,
   username VARCHAR(65) NOT NULL,
   password VARCHAR(65) NOT NULL,
-  money INT 100,
+  money INT DEFAULT 100,
   primary key (id)
 );
 
@@ -86,9 +86,8 @@ create table betting (
   	gameStatus VARCHAR(50)
 	
 );
-ALTER TABLE userdata.`user` ADD money;
 
-update `user` set money =200 
+update `user` set money =200;
 
 ALTER TABLE teams 
 DROP COLUMN logo;
