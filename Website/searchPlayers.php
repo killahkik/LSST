@@ -7,7 +7,9 @@ if (isset($_SESSION['username'])) {
 } else {
     $loginmessage = "You are not logged in.";
 }
-
+// update players
+include "apiFunctions.php";
+getPlayers();
 ?>
 <!DOCTYPE html>
 <html lang="en">

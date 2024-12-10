@@ -162,17 +162,17 @@ function getPlayers(){
     $stmt = $conn->prepare($sql);
 
     foreach ($data['body'] as $player) {
-        $playerID = $player['playerID'];
-        $espnName = $player['espnName'];
-        $weight = $player['weight'];
-        $height = $player['height'];
-        $age = $player['age'];
-        $jerseyNum = $player['jerseyNum'];
-        $team = $player['team'];
-        $teamID = $player['teamID'];
-        $lastGamePlayed = $player['lastGamePlayed'];
-        $pos = $player['pos'];
-        $espnHeadshot = $player['espnHeadshot'];
+        $playerID = @$player['playerID'];
+        $espnName = @$player['espnName'];
+        $weight = @$player['weight'];
+        $height = @$player['height'];
+        $age = @$player['age'];
+        $jerseyNum = @$player['jerseyNum'];
+        $team = @$player['team'];
+        $teamID = @$player['teamID'];
+        $lastGamePlayed = @$player['lastGamePlayed'];
+        $pos = @$player['pos'];
+        $espnHeadshot = @$player['espnHeadshot'];
     
         // Bind parameters and execute
         $stmt->bind_param(
